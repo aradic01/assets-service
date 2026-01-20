@@ -32,7 +32,7 @@ export class AssetService {
         },
       });
 
-      return AssetMapper.toResponseDto(assetData, assetData.assetType);
+      return AssetMapper.toResponseDto(assetData);
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === PrismaErrorCodes.UNIQUE_CONSTRAINT_VIOLATION) {
@@ -53,10 +53,7 @@ export class AssetService {
       },
     });
 
-    return AssetMapper.toResponseDtoList(
-      assets,
-      assets.map((a) => a.assetType),
-    );
+    return AssetMapper.toResponseDtoList(assets);
   }
 
   async findOne(code: string): Promise<AssetResponseDto> {
@@ -72,7 +69,7 @@ export class AssetService {
       throw new AssetNotFoundException(`Asset with code ${code} not found`);
     }
 
-    return AssetMapper.toResponseDto(asset, asset.assetType);
+    return AssetMapper.toResponseDto(asset);
   }
 
   async editAsset(
@@ -107,7 +104,7 @@ export class AssetService {
       },
     });
 
-    return AssetMapper.toResponseDto(updatedAsset, updatedAsset.assetType);
+    return AssetMapper.toResponseDto(updatedAsset);
   }
 
   async remove(code: string): Promise<void> {
