@@ -1,0 +1,28 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Asset {
+  id          Int       @id @default(autoincrement())
+  code        String    @unique @db.VarChar(4)
+  assetTypeId Int
+  isOccupied  Boolean   @default(false)
+  assetType   AssetType @relation(fields: [assetTypeId], references: [id])
+
+  @@map("assets")
+}
+
+model AssetType {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique @db.VarChar(50)
+  assets Asset[]
+
+  @@map("asset_types")
+}

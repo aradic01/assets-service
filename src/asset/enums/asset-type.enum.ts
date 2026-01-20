@@ -1,0 +1,4 @@
+export enum AssetType {
+  PARKING = 'PARKING',
+  CHARGING_STATION = 'CHARGING_STATION',
+}
