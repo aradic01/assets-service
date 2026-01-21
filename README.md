@@ -12,7 +12,7 @@ The API has basic CRUD funcionality for managing asset resources.
 
 There are two options when running the service:
 
-- Running with locally using PostgreSQL database running in Docker
+- Running the app locally using PostgreSQL database running in Docker
 - Running it completely with Docker (recommended)
 
 > Note: To run the service locally, you should have Node.js 20+ installed!
@@ -41,6 +41,12 @@ and then execute the following command in order to generate prisma client, migra
 npm run db:init
 ```
 
+You can then start the server in by running:
+
+```bash
+npm run start
+```
+
 To run it with Docker, first copy the contents of .env.docker to .env:
 
 ```bash
@@ -56,14 +62,16 @@ docker compose up -d --build
 After that, run the following to set up the database:
 
 ```bash
-docker-compose exec assets-api npm run db:init
+docker exec -it assets-api sh -c "npm run db:init"
 ```
 
 > Note: "assets-api" is the container name set in docker-compose.yaml. If you change the container name, update the command accordingly!
+>
+> Also, if your container uses bash, then replace sh with bash!
 
 # Try it out!
 
 There is a Postman collection containing the basic API requests included in the project repository, so it can be directly imported in the Postman app. The requests can then be modified for testing various data.
 If you don't like Postman, you can import it in Insomnia or a similar API testing app or just use curl.
 
-For API documentation, just go to http://localhost:3000/api-docs in your browser to explore the API with Swagger UI.
+For API documentation, just go to http://localhost:3000/api-docs in your browser after running the server to explore the API with Swagger UI.
