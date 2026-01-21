@@ -31,6 +31,4 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/generated ./generated
 
-RUN ls -l
-
 CMD ["npm", "run", "start:prod"]
