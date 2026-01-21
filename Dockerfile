@@ -1,25 +1,36 @@
-# This is a one-stage Dockerfile, sufficient for the purpose of this app.
-# For production-grade applications, introducing builder stage should be considered for optimization.
-
-# Get the latest LTS version
-FROM node:lts
+# -----------------------------------------
+# Stage 1: Build stage
+# -----------------------------------------
+FROM node:22.18.0 AS builder
 
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
 
-# Install dependencies
 RUN npm install
 
-# Copy everything else
 COPY . .
 
-# Generate Prisma Client
 RUN npx prisma generate
 
-# Build the application
 RUN npm run build
 
-# Start the application
-CMD ["npm", "run", "start"]
+# -------------------------------------------
+# Stage 2: Runtime stage
+# -------------------------------------------
+
+FROM node:22.18.0
+
+WORKDIR /app
+
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+
+COPY --from=builder /app/dist ./dist
+
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/generated ./generated
+
+RUN ls -l
+
+CMD ["npm", "run", "start:prod"]
